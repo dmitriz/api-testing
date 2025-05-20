@@ -1,0 +1,26 @@
+{
+  "name": "api-request-builder-contract-test-example",
+  "version": "1.0.0",
+  "description": "Example of contract testing an Axios request builder function using OpenAPI.",
+  "main": "src/request-builder.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "openapi",
+    "swagger",
+    "contract-testing",
+    "axios",
+    "jest",
+    "openapi-backend"
+  ],
+  "author": "Your Name or GitHub Username",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "openapi-backend": "^5.9.2"
+  }
+}
