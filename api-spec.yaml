@@ -1,0 +1,107 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+  description: A simple API for demonstrating request builder contract testing.
+servers:
+  - url: https://api.example.com/v1
+paths:
+  /users/{userId}/profile:
+    get:
+      summary: Get user profile
+      operationId: getUserProfile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "a1b2c3d4-e5f6-7890-1234-567890abcdef"
+          description: The ID of the user to retrieve.
+        - name: includeDetails
+          in: query
+          required: false
+          schema:
+            type: boolean
+          example: true
+          description: Whether to include detailed information in the response.
+      responses:
+        '200':
+          description: User profile data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    example: "f4a7b8c9-d0e1-2345-6789-0abcdef12345"
+                    description: The unique ID of the user.
+                  email:
+                    type: string
+                    format: email
+                    example: "test@example.com"
+                    description: The user's email address.
+                  displayName:
+                    type: string
+                    example: "Test User"
+                    description: The user's display name.
+    put:
+      summary: Update user profile
+      operationId: updateUserProfile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: "b2c3d4e5-f6a7-8901-2345-67890abcdef1"
+          description: The ID of the user to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "updated@example.com"
+                  description: The user's updated email address.
+                displayName:
+                  type: string
+                  example: "Updated User Name"
+                  description: The user's updated display name.
+              required:
+                - email
+      responses:
+        '200':
+          description: Update confirmation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Profile updated successfully."
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 1001
+                    description: An error code.
+                  message:
+                    type: string
+                    example: "Invalid email format."
+                    description: A human-readable error message.
+                    
