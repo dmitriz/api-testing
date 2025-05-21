@@ -153,35 +153,187 @@ The project includes a Postman collection (`tests/postman/api-collection.json`) 
 
 - Run the API tests from the command line:
 
-  /**
-
-- @description This component handles consumer-side testing functionality
-- 
-- @testing
-- Consumer-side tests focus on the following files:
-- - consumer/api.js
-- - consumer/client.js
-- - consumer/utils.js
-- 
-- The `npm test` command verifies:
-- - API contract compliance
-- - Correct handling of various response scenarios
-- - Edge case management
-- - Integration with dependent services
-- 
-- Consumer tests use the mock server defined in **tests**/mocks to simulate
-- real-world API interactions without external dependencies.
-   */
-
    ```bash
    npm run test:api
    ```
 
-   Note: The command uses the `--no-experimental-global-webcrypto` Node.js flag to ensure compatibility with Newman v6.2.0 on newer Node.js versions (v22+). This flag prevents Node.js from using the experimental Web Crypto API implementation, which can cause conflicts with Newman's internal dependencies. The command is defined in package.json as:
-   
-   ```json
-   "test:api": "NODE_OPTIONS=\"--no-experimental-global-webcrypto\" newman run tests/postman/api-collection.json -e tests/postman/environment.json"
-   ```
+### Newman Compatibility with Node.js v22+
+
+Running Newman with newer Node.js versions (v22+) presents compatibility challenges due to changes in the JavaScript runtime. This project includes a custom solution to address these issues.
+
+#### Background on the Issues
+
+Newman v6.2.1 (and many of its dependencies, particularly the `colors` package) encounters several problems when running in Node.js v22+:
+
+1. **Missing `global` Object**: Node.js v22+ doesn't define the `global` object the same way older versions did, causing "global is not defined" errors.
+
+2. **Prototype Access Restrictions**: Node.js v22+ restricts access to `Object.prototype.__proto__` when running with `--disable-proto=throw`, which breaks the `colors` package used by Newman.
+
+3. **Web Crypto API Conflicts**: The experimental Web Crypto API in Node.js v22+ conflicts with some of Newman's dependencies.
+
+#### Solution Implementation
+
+The project includes a robust bash script wrapper (`tests/postman/run-newman.sh`) that tries multiple approaches to run Newman successfully:
+
+```bash
+#!/bin/bash
+
+# This script provides workarounds for running Newman with recent Node.js versions
+# It attempts several methods to run Newman successfully
+
+echo "Running Newman compatibility script..."
+
+# Method 0: Try using NVM with Node.js v18 (known to work well with Newman)
+if command -v nvm &>/dev/null; then
+    echo "NVM detected. Trying Method 0: Running with Node.js v18..."
+    nvm use 18 &>/dev/null || nvm exec 18 npx newman run "$@"
+    
+    if [ $? -eq 0 ]; then
+        echo "Newman tests completed successfully with Node.js v18"
+        exit 0
+    else
+        echo "Method 0 failed. Falling back to other methods..."
+    fi
+fi
+
+# Method 1: Try using npx with specific Node.js options
+echo "Trying Method 1: npx with Node.js options..."
+export NODE_OPTIONS="--no-experimental-fetch --no-experimental-global-webcrypto"
+npx --yes newman run "$@"
+
+# If the above fails, try the next method
+if [ $? -ne 0 ]; then
+    echo "Method 1 failed. Trying Method 2: direct polyfill..."
+    
+    # Create a temporary script with polyfills
+    TEMP_SCRIPT=$(mktemp)
+    
+    cat > "$TEMP_SCRIPT" << 'EOL'
+// Polyfill global for Node.js v22+
+if (typeof global === 'undefined') {
+  global = globalThis;
+}
+
+// Find and load the Newman module
+try {
+  const path = require('path');
+  const fs = require('fs');
+  
+  const projectRoot = path.resolve(__dirname, '..', '..');
+  const nodeModulesPath = path.join(projectRoot, 'node_modules');
+  
+  if (fs.existsSync(path.join(nodeModulesPath, 'newman'))) {
+    // Load newman CLI from local node_modules
+    require(path.join(nodeModulesPath, 'newman/bin/newman.js'));
+  } else {
+    console.error('Newman not found in node_modules. Please install it first with: npm install newman');
+    process.exit(1);
+  }
+} catch (error) {
+  console.error('Error loading newman:', error.message);
+  process.exit(1);
+}
+EOL
+    
+    # Run the script with the arguments
+    echo "Running with custom Newman wrapper..."
+    node "$TEMP_SCRIPT" run "$@"
+    RESULT=$?
+    
+    # Clean up
+    rm "$TEMP_SCRIPT"
+    
+    exit $RESULT
+fi
+```
+
+#### How the Script Works
+
+The script tries three different methods in sequence:
+
+1. **Method 0 - NVM with Node.js v18**:
+   - If NVM (Node Version Manager) is available, it attempts to run Newman with Node.js v18
+   - This is the most reliable approach because Node.js v18 is fully compatible with Newman
+
+2. **Method 1 - Node.js Options**:
+   - Uses specific Node.js options (`--no-experimental-fetch --no-experimental-global-webcrypto`)
+   - These flags disable features in newer Node.js versions that conflict with Newman
+
+3. **Method 2 - JavaScript Polyfill**:
+   - Creates a temporary JavaScript file that polyfills the `global` object
+   - The script then requires the local Newman installation directly
+   - This bypasses issues with missing global objects and prototype access restrictions
+
+#### Alternative JavaScript Runner
+
+The project also includes a pure JavaScript solution (`tests/postman/run-newman.js`) that can be used as another option:
+
+```javascript
+/**
+ * Custom Newman runner script
+ * 
+ * This script provides a workaround for Node.js compatibility issues with Newman.
+ * It runs Newman programmatically with the right configuration to avoid
+ * "global is not defined" errors in newer Node.js versions.
+ */
+
+const newman = require('newman');
+const path = require('path');
+const fs = require('fs');
+
+// Get absolute paths to the collection and environment files
+const collectionPath = path.resolve(__dirname, 'api-collection.json');
+const environmentPath = path.resolve(__dirname, 'environment.json');
+
+// Verify files exist
+if (!fs.existsSync(collectionPath)) {
+  console.error(`Collection file not found: ${collectionPath}`);
+  process.exit(1);
+}
+
+if (!fs.existsSync(environmentPath)) {
+  console.error(`Environment file not found: ${environmentPath}`);
+  process.exit(1);
+}
+
+// Run Newman with the collection and environment
+newman.run({
+  collection: collectionPath,
+  environment: environmentPath,
+  reporters: ['cli']
+}, function (err) {
+  if (err) {
+    console.error('Newman run failed:', err);
+    process.exit(1);
+  }
+  console.log('Newman collection run completed.');
+});
+```
+
+#### Package.json Configuration
+
+The bash script is integrated into the project via package.json:
+
+```json
+"test:api": "bash tests/postman/run-newman.sh tests/postman/api-collection.json -e tests/postman/environment.json",
+"test:api:explain": "echo \"Newman is used to run Postman collections for API testing via a bash script that fixes issues with Node.js v22+\""
+```
+
+#### Benefits of This Approach
+
+1. **Backward and Forward Compatibility**: Works with multiple Node.js versions
+2. **Multiple Fallback Methods**: If one approach fails, others are tried
+3. **No Manual Node.js Downgrade Required**: Users don't need to switch Node.js versions
+4. **Transparent to End Users**: Just run `npm run test:api` as normal
+5. **Self-Documenting**: The script includes detailed comments explaining each method
+6. **No External Dependencies**: Uses only built-in tools and installed packages
+
+#### When to Use This
+
+Use this approach when:
+- You're running Node.js v22+ and need to use Newman
+- You encounter "global is not defined" errors or issues with `__proto__` access
+- You want a solution that works across different environments without manual intervention
 
 ### 2. Jest Unit Tests
 
@@ -334,8 +486,14 @@ These tests validate the client without requiring the actual API server to be ru
 ## Scripts
 
 - `npm test` - Run Jest tests for the OpenAI Assistants API client
-- `npm run start:server` - Start the mock API server on port 3001
-- `npm run test:api` - Run Newman tests against the mock API server
+- `npm run start` - Start the mock API server using PM2
+- `npm run stop` - Stop the running API server
+- `npm run restart` - Restart the API server
+- `npm run status` - Check the status of PM2 processes
+- `npm run logs` - View real-time logs from the API server
+- `npm run logs:recent` - View the most recent logs (20 lines)
+- `npm run delete` - Remove the API server from PM2
+- `npm run test:api` - Run Newman tests against the mock API server with Node.js v22+ compatibility
 
 ## Dependencies
 
