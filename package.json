@@ -10,7 +10,6 @@
   "scripts": {
     "test": "jest",
     "start": "npx pm2 start ecosystem.config.js",
-    "start:server": "npx pm2 start ecosystem.config.js",
     "stop": "npx pm2 stop api-server",
     "restart": "npx pm2 restart api-server",
     "status": "npx pm2 status",

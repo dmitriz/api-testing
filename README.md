@@ -40,12 +40,36 @@ The server will run on <http://localhost:3001> and simulates the OpenAI Assistan
 
 The project uses PM2 to manage the API server process. Here are the available commands:
 
-- **Start server**: `npm start` or `npm run start:server`
-- **Stop server**: `npm run stop`
-- **Restart server**: `npm run restart`
-- **Check server status**: `npm run status`
-- **View server logs**: `npm run logs`
-- **Remove server from PM2**: `npm run delete`
+- **Start server**: `npm start` - Launches the API server using PM2 with settings from ecosystem.config.js
+- **Stop server**: `npm run stop` - Stops the running API server instance
+- **Restart server**: `npm run restart` - Restarts the API server (useful after code changes)
+- **Check server status**: `npm run status` - Displays current PM2 processes and their status
+- **View server logs**: `npm run logs` - Shows real-time application logs for debugging
+- **Remove server from PM2**: `npm run delete` - Completely removes the server from PM2 management
+
+### PM2 Configuration Details
+
+The `ecosystem.config.js` file contains important PM2 configuration settings:
+
+- **Basic Configuration**:
+  - `name`: "api-server" - Identifier for the process in PM2
+  - `script`: "src/api-server.js" - Main application entry point
+  - `instances`: 1 - Number of instances (no clustering in this setup)
+
+- **Restart Behavior**:
+  - `autorestart`: true - Automatically restarts if the app crashes
+  - `watch`: false - Does not watch for file changes to restart
+
+- **Memory Management**:
+  - `max_memory_restart`: "200M" - Restarts if memory usage exceeds this value
+
+- **Environment Variables**:
+  - Development and production environments with appropriate NODE_ENV settings
+
+- **Process Management**:
+  - `kill_timeout`: 3000ms - Time to wait before forcing process termination
+  - `restart_delay`: 1000ms - Wait time between auto-restarts
+  - `exp_backoff_restart_delay`: 100ms - Starting delay for exponential backoff
 
 PM2 Benefits:
 - Automatically restarts the server if it crashes
