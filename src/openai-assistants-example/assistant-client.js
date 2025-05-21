@@ -13,6 +13,9 @@ if (!openaiApiKey) {
   console.warn("Warning: OPENAI_API_KEY environment variable is not set. OpenAI calls will likely fail.");
   // You might choose to throw an error here in a real application
   // throw new Error("OPENAI_API_KEY environment variable is not set.");
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error("OPENAI_API_KEY environment variable is not set.");
+  }
 }
 
 const openai = new OpenAI({
