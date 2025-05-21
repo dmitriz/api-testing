@@ -17,8 +17,8 @@
     "logs:explain": "echo \"PM2 logs command streams real-time logs and requires manual exit with Ctrl+C when finished viewing\"",
     "logs:recent": "npx pm2 logs api-server --lines 20 --nostream",
     "delete": "npx pm2 delete api-server",
-    "test:api": "newman run tests/postman/api-collection.json -e tests/postman/environment.json",
-    "test:api:explain": "echo \"Newman is used to run Postman collections for API testing disables experimental Web Crypto API in Node.js to prevent conflicts with Newman dependencies\""
+    "test:api": "bash tests/postman/run-newman.sh tests/postman/api-collection.json -e tests/postman/environment.json",
+    "test:api:explain": "echo \"Newman is used to run Postman collections for API testing via a bash script that fixes issues with Node.js v22+\""
   },
   "keywords": [
     "openapi",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "newman": "^6.2.0",
+    "newman": "^6.2.1",
     "openapi-backend": "^5.9.2",
     "pm2": "^6.0.6"
   }
