@@ -12,7 +12,8 @@ app.get('/health', (req, res) => {
 // Assistant chat endpoint - simulates a response from OpenAI Assistants API
 app.post('/assistant/chat', (req, res) => {
   const { message } = req.body;
-  if (!message) {
+  // Allow empty strings to pass, but reject null/undefined
+  if (message === undefined || message === null) {
     return res.status(400).json({
       code: 1001,
       message: "Missing required field: 'message'."
