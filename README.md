@@ -54,7 +54,8 @@ The `ecosystem.config.js` file contains important PM2 configuration settings:
 - **Basic Configuration**:
   - `name`: "api-server" - Identifier for the process in PM2
   - `script`: "src/api-server.js" - Main application entry point
-  - `instances`: 1 - Number of instances (no clustering in this setup)
+  - `script`: "src/mock-openai-api-server.js" - Main application entry point
+- `instances`: 1 - Number of instances (no clustering in this setup)
 
 - **Restart Behavior**:
   - `autorestart`: true - Automatically restarts if the app crashes
@@ -342,7 +343,6 @@ These tests validate the client without requiring the actual API server to be ru
 - Jest - Testing framework for unit tests
 - Newman - Command-line runner for Postman collections
 - OpenAI - SDK for interacting with OpenAI's Assistants API
-- dotenv - Environment variable management for local development
 
 ## License
 

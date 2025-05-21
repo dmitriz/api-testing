@@ -1,4 +1,3 @@
-// tests/openai-assistants-example/assistant-client.test.js
 // First mock the OpenAI module before requiring the client
 jest.mock('openai', () => {
   const mockAssistants = {
@@ -32,7 +31,7 @@ const {
   runAssistant,
   listMessages,
   openai // This will now use the mocked OpenAI instance
-} = require('../../src/openai-assistants-example/assistant-client');
+} = require('./assistant-client');
 
 // Helper to get the mocked functions from the deeply nested structure
 // This is a bit verbose due to the SDK's structure.
