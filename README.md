@@ -331,6 +331,7 @@ The bash script is integrated into the project via package.json:
 #### When to Use This
 
 Use this approach when:
+
 - You're running Node.js v22+ and need to use Newman
 - You encounter "global is not defined" errors or issues with `__proto__` access
 - You want a solution that works across different environments without manual intervention
