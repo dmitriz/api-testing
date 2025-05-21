@@ -35,12 +35,24 @@ app.use((err, req, res, next) => {
 });
 
 if (require.main === module) {
-     app.listen(port, () => {
-         console.log(`API Server listening at http://localhost:${port}`);
-         console.log('Endpoints:');
-         console.log(`  GET /health`);
-         console.log(`  POST /assistant/chat`);
-     });
+    const server = app.listen(port, () => {
+        console.log(`API Server listening at http://localhost:${port}`);
+        console.log('Endpoints:');
+        console.log(`  GET /health`);
+        console.log(`  POST /assistant/chat`);
+    }).on('error', (err) => {
+        console.error(`Failed to start server: ${err.message}`);
+        process.exit(1); // PM2 will handle the restart
+    });
+    
+    // Graceful shutdown
+    process.on('SIGINT', () => {
+        console.log('Gracefully shutting down server...');
+        server.close(() => {
+            console.log('Server shut down successfully');
+            process.exit(0);
+        });
+    });
 }
 
 module.exports = app;

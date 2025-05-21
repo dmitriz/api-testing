@@ -28,13 +28,30 @@ npm install
 
 ## Running the API Server
 
-Start the Express API server:
+Start the Express API server using PM2 process manager:
 
 ```bash
-npm run start:server
+npm start
 ```
 
 The server will run on <http://localhost:3001> and simulates the OpenAI Assistants API.
+
+### PM2 Commands
+
+The project uses PM2 to manage the API server process. Here are the available commands:
+
+- **Start server**: `npm start` or `npm run start:server`
+- **Stop server**: `npm run stop`
+- **Restart server**: `npm run restart`
+- **Check server status**: `npm run status`
+- **View server logs**: `npm run logs`
+- **Remove server from PM2**: `npm run delete`
+
+PM2 Benefits:
+- Automatically restarts the server if it crashes
+- Handles port conflicts gracefully
+- Provides process monitoring and management
+- Maintains logs for debugging
 
 This server implements:
 

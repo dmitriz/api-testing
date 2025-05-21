@@ -9,7 +9,13 @@
   },
   "scripts": {
     "test": "jest",
-    "start:server": "node src/api-server.js",
+    "start": "npx pm2 start ecosystem.config.js",
+    "start:server": "npx pm2 start ecosystem.config.js",
+    "stop": "npx pm2 stop api-server",
+    "restart": "npx pm2 restart api-server",
+    "status": "npx pm2 status",
+    "logs": "npx pm2 logs api-server",
+    "delete": "npx pm2 delete api-server",
     "test:api": "NODE_OPTIONS=\"--no-experimental-global-webcrypto\" newman run tests/postman/api-collection.json -e tests/postman/environment.json"
   },
   "keywords": [
@@ -33,6 +39,7 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "newman": "^6.2.0",
-    "openapi-backend": "^5.9.2"
+    "openapi-backend": "^5.9.2",
+    "pm2": "^6.0.6"
   }
 }
