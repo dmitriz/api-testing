@@ -10,7 +10,7 @@
   "scripts": {
     "test": "jest",
     "start:server": "node src/api-server.js",
-    "test:api": "newman run tests/postman/api-collection.json -e tests/postman/environment.json"
+    "test:api": "NODE_OPTIONS=\"--no-experimental-global-webcrypto\" newman run tests/postman/api-collection.json -e tests/postman/environment.json"
   },
   "keywords": [
     "openapi",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "newman": "^5.3.2",
+    "newman": "^6.2.0",
     "openapi-backend": "^5.9.2"
   }
 }

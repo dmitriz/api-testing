@@ -1,34 +1,27 @@
 const express = require('express');
-const OpenApiValidator = require('express-openapi-validator');
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(express.json());
 
-// Setup OpenAPI validation middleware
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
 
-// Use OpenAPI validation middleware
-app.use(
-  OpenApiValidator.middleware({
-    apiSpec: './openapi.yaml', // Path to your OpenAPI specification 
-    validateRequests: true,
-    validateResponses: true,
-    // Custom error handler to match your error format
-    validateApiSpec: true
-  })
-);
-
-// Add error handler for OpenAPI validation errors
-app.use((err, req, res, next) => {
-  // Handle validation errors
-  if (err.status && err.errors) {
-    return res.status(err.status).json({
-      code: 1000,
-      message: `Validation error: ${err.message}`,
-      errors: err.errors
+// Assistant chat endpoint
+app.post('/assistant/chat', (req, res) => {
+  const { message } = req.body;
+  if (!message) {
+    return res.status(400).json({
+      code: 1001,
+      message: "Missing required field: 'message'."
     });
   }
-  next(err);
+  // Simple mock response
+  res.status(200).json({
+    response: `AI response to: "${message}"`
+  });
 });
 
 const users = {

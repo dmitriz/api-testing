@@ -28,10 +28,8 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:3000/health",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
           "path": ["health"]
         }
       },
@@ -76,10 +74,8 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/assistant/chat",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "3000",
+          "raw": "{{baseUrl}}/assistant/chat",
+          "host": ["{{baseUrl}}"],
           "path": ["assistant", "chat"]
         },
         "body": {
