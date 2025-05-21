@@ -8,7 +8,7 @@ This project serves as an example of:
 
 1. A Node.js Express API server that simulates the OpenAI Assistants API for testing
 2. API testing using Postman collections and Newman CLI runner
-3. A complete OpenAI Assistants API client with full error handling and comprehensive functionality
+3. An OpenAI Assistants API client that demonstrates key interactions including assistant creation, thread management, messaging, and run execution with appropriate error handling
 4. Jest-based unit testing with mocks to validate client behavior
 
 ## Getting Started
@@ -187,6 +187,7 @@ This project includes a complete client for interacting with the OpenAI Assistan
 The client code looks for the API key in the following locations, in order:
 
 1. A file at `.secrets/api-keys.js` with the following structure:
+   
    ```javascript
    module.exports = {
      OPENAI_API_KEY: 'your_actual_api_key_here'
