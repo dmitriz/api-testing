@@ -9,6 +9,7 @@ This project serves as an example of:
 1. A Node.js Express API server that implements the endpoints defined in `api-spec.yaml`
 2. Contract testing of the API provider using Dredd
 3. In-memory data storage for demonstration purposes
+4. OpenAI Assistants API integration examples
 
 ## Getting Started
 
@@ -82,11 +83,50 @@ curl -X PUT -H "Content-Type: application/json" \
   http://localhost:3000/v1/users/a1b2c3d4-e5f6-7890-1234-567890abcdef/profile
 ```
 
+## OpenAI Assistants API Example Setup
+
+This project includes an example of interacting with the OpenAI Assistants API. To run this example, you will need an OpenAI API key.
+
+### Obtaining an OpenAI API Key
+
+1.  Go to the [OpenAI API keys page](https://platform.openai.com/api-keys).
+2.  Log in or create an account if you don't have one.
+3.  Click on "+ Create new secret key".
+4.  Give your key a name (e.g., "api-testing-example") and click "Create secret key".
+5.  **Important:** Copy the generated API key immediately and store it securely. You will not be able to see it again through the OpenAI website.
+
+### Configuring the API Key
+
+The example code expects the API key to be available as an environment variable named `OPENAI_API_KEY`.
+
+**Do NOT commit your API key directly into the code or repository.**
+
+You can set up the environment variable in one of the following ways:
+
+* **Temporarily in your terminal session:**
+    Before running the application or tests that use the OpenAI API, execute this in your terminal:
+    ```bash
+    export OPENAI_API_KEY='your_actual_api_key_here'
+    ```
+    (On Windows, use `set OPENAI_API_KEY=your_actual_api_key_here`)
+    This variable will only be set for the current terminal session.
+
+* **Using a `.env` file (Recommended for local development):**
+    1.  Create a file named `.env` in the root directory of this project.
+    2.  Add the following line to the `.env` file, replacing `your_actual_api_key_here` with your actual key:
+        ```
+        OPENAI_API_KEY='your_actual_api_key_here'
+        ```
+    3.  Ensure that `.env` is listed in your `.gitignore` file to prevent it from being committed to Git.
+    4.  You will need a library like `dotenv` to load this file in your application code if you run scripts directly. Jest typically has ways to load `.env` files as well, or you might source it before running tests. For simplicity in the initial example, we'll assume the environment variable is set directly or use `dotenv` in the client code.
+
 ## Project Structure
 
 - `api-spec.yaml` - OpenAPI specification defining the API contract
 - `src/api-server.js` - Express API server implementation
 - `dredd.yml` - Configuration for the Dredd API testing tool
+- `src/openai-assistants-example/` - Examples of using the OpenAI Assistants API
+- `tests/openai-assistants-example/` - Tests for the OpenAI Assistants examples
 
 ## Scripts
 
@@ -99,6 +139,7 @@ curl -X PUT -H "Content-Type: application/json" \
 - Express - Web server framework for the API
 - Dredd - Contract testing tool for validating API implementations
 - Jest - Testing framework
+- OpenAI - SDK for interacting with OpenAI's APIs
 - OpenAPI Backend - OpenAPI utilities
 
 ## License

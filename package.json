@@ -1,7 +1,7 @@
 {
   "name": "api-request-builder-contract-test-example",
   "version": "1.0.0",
-  "description": "Example of contract testing an Axios request builder function and a sample API provider using OpenAPI.",
+  "description": "Examples and documentation for API testing, focusing on OpenAPI specifications, contract testing, request validation, and OpenAI Assistants API.",
   "main": "src/api-server.js",
   "directories": {
     "test": "tests",
@@ -20,12 +20,16 @@
     "jest",
     "openapi-backend",
     "express",
-    "dredd"
+    "dredd",
+    "openai",
+    "assistants-api"
   ],
   "author": "dmitriz",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "openai": "^4.47.1",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "jest": "^29.7.0",
