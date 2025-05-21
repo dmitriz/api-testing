@@ -72,6 +72,7 @@ The `ecosystem.config.js` file contains important PM2 configuration settings:
   - `exp_backoff_restart_delay`: 100ms - Starting delay for exponential backoff
 
 PM2 Benefits:
+
 - Automatically restarts the server if it crashes
 - Handles port conflicts gracefully
 - Provides process monitoring and management
@@ -146,11 +147,29 @@ The project includes a Postman collection (`tests/postman/api-collection.json`) 
 1. Make sure the server is running in another terminal window:
 
    ```bash
-   npm run start:server
+   npm run start
    ```
 
 2. Run the API tests from the command line:
 
+  /**
+   * @description This component handles consumer-side testing functionality
+   * 
+   * @testing
+   * Consumer-side tests focus on the following files:
+   * - consumer/api.js
+   * - consumer/client.js
+   * - consumer/utils.js
+   * 
+   * The `npm test` command verifies:
+   * - API contract compliance
+   * - Correct handling of various response scenarios
+   * - Edge case management
+   * - Integration with dependent services
+   * 
+   * Consumer tests use the mock server defined in __tests__/mocks to simulate
+   * real-world API interactions without external dependencies.
+   */
    ```bash
    npm run test:api
    ```
