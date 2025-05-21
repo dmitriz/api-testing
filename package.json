@@ -1,0 +1,47 @@
+{
+  "name": "api-request-builder-contract-test-example",
+  "version": "1.0.0",
+  "description": "Examples and documentation for API testing, focusing on OpenAPI specifications, contract testing, request validation, and OpenAI Assistants API.",
+  "main": "src/mock-openai-api-server.js",
+  "directories": {
+    "test": "tests",
+    "src": "src"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:explain": "echo \"Jest tests will be added in future updates. Currently, use npm run test:api for API testing.\"",
+    "start": "npx pm2 start ecosystem.config.js",
+    "stop": "npx pm2 stop api-server",
+    "restart": "npx pm2 restart api-server",
+    "status": "npx pm2 status",
+    "logs": "npx pm2 logs api-server",
+    "logs:explain": "echo \"PM2 logs command streams real-time logs and requires manual exit with Ctrl+C when finished viewing\"",
+    "logs:recent": "npx pm2 logs api-server --lines 20 --nostream",
+    "delete": "npx pm2 delete api-server",
+    "test:api": "bash tests/postman/run-newman.sh tests/postman/api-collection.json -e tests/postman/environment.json",
+    "test:api:explain": "echo \"Newman is used to run Postman collections for API testing via a bash script that fixes issues with Node.js v22+\""
+  },
+  "keywords": [
+    "openapi",
+    "swagger",
+    "contract-testing",
+    "axios",
+    "jest",
+    "openapi-backend",
+    "express",
+    "openai",
+    "assistants-api"
+  ],
+  "author": "dmitriz",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "openai": "^4.100.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "newman": "^6.2.1",
+    "openapi-backend": "^5.9.2",
+    "pm2": "^6.0.6"
+  }
+}
