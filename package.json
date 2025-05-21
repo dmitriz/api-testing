@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "newman": "^6.2.0",
+    "newman": "^5.3.2",
     "openapi-backend": "^5.9.2"
   }
 }
