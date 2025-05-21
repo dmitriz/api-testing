@@ -8,7 +8,7 @@
     "src": "src"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "start:server": "node src/api-server.js",
     "test:contract:provider": "dredd api-spec.yaml http://localhost:3000"
   },

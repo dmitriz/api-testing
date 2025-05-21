@@ -1,6 +1,6 @@
 # API Request Builder Contract Test Example
 
-This repository demonstrates contract testing for both API consumers (using a request builder) and API providers (using an Express server) with OpenAPI specifications.
+This repository demonstrates API provider contract testing using an Express server implementation validated against OpenAPI specifications. It shows how to ensure your API implementation correctly follows its OpenAPI contract using Dredd for automated validation.
 
 ## Project Overview
 
@@ -89,11 +89,11 @@ This project includes an example of interacting with the OpenAI Assistants API. 
 
 ### Obtaining an OpenAI API Key
 
-1.  Go to the [OpenAI API keys page](https://platform.openai.com/api-keys).
-2.  Log in or create an account if you don't have one.
-3.  Click on "+ Create new secret key".
-4.  Give your key a name (e.g., "api-testing-example") and click "Create secret key".
-5.  **Important:** Copy the generated API key immediately and store it securely. You will not be able to see it again through the OpenAI website.
+1. Go to the [OpenAI API keys page](https://platform.openai.com/api-keys).
+2. Log in or create an account if you don't have one.
+3. Click on "+ Create new secret key".
+4. Give your key a name (e.g., "api-testing-example") and click "Create secret key".
+5. **Important:** Copy the generated API key immediately and store it securely. You will not be able to see it again through the OpenAI website.
 
 ### Configuring the API Key
 
@@ -103,22 +103,26 @@ The example code expects the API key to be available as an environment variable 
 
 You can set up the environment variable in one of the following ways:
 
-* **Temporarily in your terminal session:**
+- **Temporarily in your terminal session:**
     Before running the application or tests that use the OpenAI API, execute this in your terminal:
+
     ```bash
     export OPENAI_API_KEY='your_actual_api_key_here'
     ```
+
     (On Windows, use `set OPENAI_API_KEY=your_actual_api_key_here`)
     This variable will only be set for the current terminal session.
 
-* **Using a `.env` file (Recommended for local development):**
-    1.  Create a file named `.env` in the root directory of this project.
-    2.  Add the following line to the `.env` file, replacing `your_actual_api_key_here` with your actual key:
-        ```
+- **Using a `.env` file (Recommended for local development):**
+    1. Create a file named `.env` in the root directory of this project.
+    2. Add the following line to the `.env` file, replacing `your_actual_api_key_here` with your actual key:
+
+        ```env
         OPENAI_API_KEY='your_actual_api_key_here'
         ```
-    3.  Ensure that `.env` is listed in your `.gitignore` file to prevent it from being committed to Git.
-    4.  You will need a library like `dotenv` to load this file in your application code if you run scripts directly. Jest typically has ways to load `.env` files as well, or you might source it before running tests. For simplicity in the initial example, we'll assume the environment variable is set directly or use `dotenv` in the client code.
+
+    3. Ensure that `.env` is listed in your `.gitignore` file to prevent it from being committed to Git.
+    4. You will need a library like `dotenv` to load this file in your application code if you run scripts directly. Jest typically has ways to load `.env` files as well, or you might source it before running tests. For simplicity in the initial example, we'll assume the environment variable is set directly or use `dotenv` in the client code.
 
 ## Project Structure
 
@@ -126,7 +130,26 @@ You can set up the environment variable in one of the following ways:
 - `src/api-server.js` - Express API server implementation
 - `dredd.yml` - Configuration for the Dredd API testing tool
 - `src/openai-assistants-example/` - Examples of using the OpenAI Assistants API
+- `src/api-client/` - Client-side code that consumes the API
 - `tests/openai-assistants-example/` - Tests for the OpenAI Assistants examples
+- `tests/api-client/` - Consumer-side tests that verify API client functionality
+
+## Consumer-Side Testing
+
+While Dredd tests validate that our API implementation meets the OpenAPI specification (provider testing), consumer-side tests verify that client code correctly interacts with the API:
+
+- Tests API client's request formatting and response handling
+- Verifies error handling for various API responses
+- Ensures proper data transformation between client and API formats
+- Uses Jest with mocked API responses to test client behavior in isolation
+
+Run consumer tests with:
+
+```bash
+npm test
+```
+
+These tests validate the client without requiring the actual API server to be running, using mock responses based on the API contract.
 
 ## Scripts
 

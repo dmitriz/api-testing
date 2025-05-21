@@ -24,6 +24,16 @@ const users = {
 
 app.get('/v1/users/:userId/profile', (req, res) => {
   const { userId } = req.params;
+
+  // Validate userId format (UUID)
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(userId)) {
+    return res.status(400).json({
+      code: 1000,
+      message: "Invalid userId format. Must be a valid UUID.",
+    });
+  }
+
   const user = users[userId];
 
   if (user) {
@@ -39,10 +49,18 @@ app.get('/v1/users/:userId/profile', (req, res) => {
     });
   }
 });
-
 app.put('/v1/users/:userId/profile', (req, res) => {
   const { userId } = req.params;
   const { email, displayName } = req.body;
+
+  // Validate userId format (UUID)
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(userId)) {
+    return res.status(400).json({
+      code: 1000,
+      message: "Invalid userId format. Must be a valid UUID.",
+    });
+  }
 
   if (!users[userId]) {
     return res.status(404).json({
@@ -50,18 +68,18 @@ app.put('/v1/users/:userId/profile', (req, res) => {
       message: 'User not found. Cannot update.',
     });
   }
-
   if (!email) {
     return res.status(400).json({
       code: 1001,
-      message: "Invalid input: 'email' is a required field in the request body.",
+      message: "Missing required field: 'email'.",
     });
   }
+  
   if (typeof email !== 'string') {
-     return res.status(400).json({
-         code: 1002,
-         message: "Invalid input: 'email' must be a string.",
-     });
+    return res.status(400).json({
+      code: 1002,
+      message: "Field 'email' must be a string."
+    });
   }
 
   users[userId].email = email;
@@ -74,8 +92,13 @@ app.put('/v1/users/:userId/profile', (req, res) => {
   });
 });
 
-app.get('/', (req, res) => {
-     res.send('API Server is running. Refer to api-spec.yaml for endpoints.');
+// Global error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({
+    code: 5000,
+    message: 'An unexpected error occurred'
+  });
 });
 
 if (require.main === module) {
