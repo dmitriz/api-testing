@@ -160,7 +160,7 @@ describe('OpenAI Assistant Client', () => {
   });
 
   describe('listMessages', () => {
-    it('should call openai.beta.threads.messages.list with correct parameters', async () => {
+    it('should fetch messages after a specific message when lastMessageId is provided (pagination)', async () => {
       const mockMessagesPage = { data: [{id: 'msg_abc', content: 'Hi'}] };
       mockListMessagesFn.mockResolvedValue(mockMessagesPage);
 
@@ -171,6 +171,19 @@ describe('OpenAI Assistant Client', () => {
       expect(mockListMessagesFn).toHaveBeenCalledWith(threadId, {
         order: 'asc',
         after: lastMessageId,
+      });
+      expect(result).toEqual(mockMessagesPage);
+    });
+
+    it('should fetch all messages when no lastMessageId is provided (first page)', async () => {
+      const mockMessagesPage = { data: [{id: 'msg_abc', content: 'Hi'}] };
+      mockListMessagesFn.mockResolvedValue(mockMessagesPage);
+
+      const threadId = 'thread_123';
+      const result = await listMessages(threadId);
+
+      expect(mockListMessagesFn).toHaveBeenCalledWith(threadId, {
+        order: 'asc',
       });
       expect(result).toEqual(mockMessagesPage);
     });
