@@ -130,9 +130,8 @@ You can set up the environment variable in one of the following ways:
 - `src/api-server.js` - Express API server implementation
 - `dredd.yml` - Configuration for the Dredd API testing tool
 - `src/openai-assistants-example/` - Examples of using the OpenAI Assistants API
-- `src/api-client/` - Client-side code that consumes the API
+- `src/openai-assistants-example/` - Example client code that consumes the API
 - `tests/openai-assistants-example/` - Tests for the OpenAI Assistants examples
-- `tests/api-client/` - Consumer-side tests that verify API client functionality
 
 ## Consumer-Side Testing
 
