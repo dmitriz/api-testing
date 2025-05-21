@@ -37,15 +37,13 @@ app.get('/v1/users/:userId/profile', (req, res) => {
   const user = users[userId];
 
   if (user) {
-    res.status(200).json({
+    return res.status(200).json({
       id: user.id,
       email: user.email,
-      app.put('/v1/users/:userId/profile', (req, res) => {
-        const { userId } = req.params;
-        const { email, displayName } = req.body;
-  
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    res.status(404).json({
+      displayName: user.displayName
+    });
+  } else {
+    return res.status(404).json({
       code: 40401,
       message: 'User not found.',
     });
@@ -53,29 +51,26 @@ app.get('/v1/users/:userId/profile', (req, res) => {
 });
 app.put('/v1/users/:userId/profile', (req, res) => {
   const { userId } = req.params;
-  if (!email || email.trim() === '') {
+  const { email, displayName } = req.body;
+  
+  // Validate UUID format
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(userId)) {
     return res.status(400).json({
-      code: 1001,
-      message: "Invalid input: 'email' is a required field and cannot be empty.",
+      code: 1000,
+      message: "Invalid userId format. Must be a valid UUID.",
     });
   }
-      if (typeof email !== 'string') {
-         return res.status(400).json({
-             code: 1002,
-             message: "Invalid input: 'email' must be a string.",
-         });
-      }
-      if (displayName !== undefined && typeof displayName !== 'string') {
-         return res.status(400).json({
-             code: 1003,
-             message: "Invalid input: 'displayName' must be a string.",
-         });
-      }
+  
+  // Check if user exists
+  if (!users[userId]) {
     return res.status(404).json({
       code: 40401,
       message: 'User not found. Cannot update.',
     });
   }
+  
+  // Validate email
   if (!email) {
     return res.status(400).json({
       code: 1001,
@@ -89,8 +84,24 @@ app.put('/v1/users/:userId/profile', (req, res) => {
       message: "Field 'email' must be a string."
     });
   }
-
-  users[userId].email = email;
+  
+  if (email.trim() === '') {
+    return res.status(400).json({
+      code: 1001,
+      message: "Invalid input: 'email' is a required field and cannot be empty.",
+    });
+  }
+  
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({
+      code: 1004,
+      message: "Invalid email format.",
+    });
+  }
+  
+  // Update email
   users[userId].email = email;
   if (displayName !== undefined) {
     if (typeof displayName === 'string') {
@@ -103,8 +114,12 @@ app.put('/v1/users/:userId/profile', (req, res) => {
     }
   }
 
+  // Return the updated user profile (Option 1)
+  const updatedUser = users[userId];
   res.status(200).json({
-    message: 'Profile updated successfully.',
+    id: updatedUser.id,
+    email: updatedUser.email,
+    displayName: updatedUser.displayName,
   });
 });
 
