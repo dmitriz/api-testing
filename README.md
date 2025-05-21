@@ -6,10 +6,10 @@ This repository demonstrates modern API testing approaches for the OpenAI Assist
 
 This project serves as an example of:
 
-1. A Node.js Express API server that simulates the OpenAI Assistants API for testing
-2. API testing using Postman collections and Newman CLI runner
+1. A Node.js Express API server that acts as a mock implementation of the OpenAI Assistants API for testing purposes
+2. API testing using Postman collections and Newman CLI runner to validate API contract conformance
 3. An OpenAI Assistants API client that demonstrates key interactions including assistant creation, thread management, messaging, and run execution with appropriate error handling
-4. Jest-based unit testing with mocks to validate client behavior
+4. Jest-based unit testing that verifies both the mock server behavior and client functionality
 
 ## Getting Started
 
@@ -153,23 +153,25 @@ The project includes a Postman collection (`tests/postman/api-collection.json`) 
 2. Run the API tests from the command line:
 
   /**
-   * @description This component handles consumer-side testing functionality
-   * 
-   * @testing
-   * Consumer-side tests focus on the following files:
-   * - consumer/api.js
-   * - consumer/client.js
-   * - consumer/utils.js
-   * 
-   * The `npm test` command verifies:
-   * - API contract compliance
-   * - Correct handling of various response scenarios
-   * - Edge case management
-   * - Integration with dependent services
-   * 
-   * Consumer tests use the mock server defined in __tests__/mocks to simulate
-   * real-world API interactions without external dependencies.
+
+- @description This component handles consumer-side testing functionality
+- 
+- @testing
+- Consumer-side tests focus on the following files:
+- - consumer/api.js
+- - consumer/client.js
+- - consumer/utils.js
+- 
+- The `npm test` command verifies:
+- - API contract compliance
+- - Correct handling of various response scenarios
+- - Edge case management
+- - Integration with dependent services
+- 
+- Consumer tests use the mock server defined in **tests**/mocks to simulate
+- real-world API interactions without external dependencies.
    */
+
    ```bash
    npm run test:api
    ```
@@ -180,17 +182,45 @@ The project includes a Postman collection (`tests/postman/api-collection.json`) 
    "test:api": "NODE_OPTIONS=\"--no-experimental-global-webcrypto\" newman run tests/postman/api-collection.json -e tests/postman/environment.json"
    ```
 
-### 2. Jest Unit Tests for OpenAI Client
+### 2. Jest Unit Tests
 
-The project includes Jest tests for the OpenAI Assistants API client code.
+The project includes two types of Jest test files:
 
-Run Jest tests with:
+#### Mock OpenAI API Tests (`tests/mock-openai-api.test.js`)
+
+These tests validate that our mock API server correctly implements the expected API behavior:
+
+- Tests the health check endpoint returns a correct 200 status response
+- Verifies the chat endpoint properly handles valid messages and responds with 200 status
+- Confirms error handling for invalid inputs (missing message, null values)
+- Checks special case handling (empty string messages)
+- Validates HTTP 404 responses for non-existent routes
+- Tests content type handling and parsing
+
+These tests use native Node.js HTTP client functionality to send requests to an isolated instance of our mock server, ensuring clean test separation and avoiding port conflicts.
+
+Run these tests with:
+
+```bash
+npm test tests/mock-openai-api.test.js
+```
+
+#### OpenAI Client Tests (`tests/openai-assistants-example/assistant-client.test.js`)
+
+These tests validate the OpenAI Assistants API client functionality:
+
+- Tests assistant creation and configuration
+- Verifies thread management (creation, messaging)
+- Validates run execution and polling behavior
+- Confirms proper error handling for API failures
+
+These tests use Jest mocks to simulate API responses without requiring actual API calls.
+
+Run all tests with:
 
 ```bash
 npm test
 ```
-
-These tests validate the OpenAI Assistants API client functionality without requiring actual API calls (using mocks).
 
 ### API Contract Verification
 

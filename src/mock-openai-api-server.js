@@ -1,3 +1,10 @@
+/**
+ * Mock OpenAI Assistants API Server
+ * 
+ * This Express server simulates the behavior of the OpenAI Assistants API
+ * for testing purposes. It implements a subset of the API endpoints with
+ * predictable mock responses.
+ */
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3001;
@@ -37,7 +44,7 @@ app.use((err, req, res, next) => {
 
 if (require.main === module) {
     const server = app.listen(port, () => {
-        console.log(`API Server listening at http://localhost:${port}`);
+        console.log(`Mock OpenAI API Server listening at http://localhost:${port}`);
         console.log('Endpoints:');
         console.log(`  GET /health`);
         console.log(`  POST /assistant/chat`);

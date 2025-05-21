@@ -2,7 +2,7 @@
   "name": "api-request-builder-contract-test-example",
   "version": "1.0.0",
   "description": "Examples and documentation for API testing, focusing on OpenAPI specifications, contract testing, request validation, and OpenAI Assistants API.",
-  "main": "src/api-server.js",
+  "main": "src/mock-openai-api-server.js",
   "directories": {
     "test": "tests",
     "src": "src"
