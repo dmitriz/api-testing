@@ -49,6 +49,9 @@
               "pm.test('Response has assistant message', function() {",
               "    const responseData = pm.response.json();",
               "    pm.expect(responseData).to.have.property('response');",
+              "    pm.expect(responseData.response).to.be.an('object');",
+              "    pm.expect(responseData.response).to.have.property('message');",
+              "    pm.expect(responseData.response.message).to.be.a('string');",
               "});"
             ],
             "type": "text/javascript"

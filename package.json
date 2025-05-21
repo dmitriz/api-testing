@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:explain": "echo \"Jest tests will be added in future updates. Currently, use npm run test:api for API testing.\"",
     "start": "npx pm2 start ecosystem.config.js",
     "stop": "npx pm2 stop api-server",
     "restart": "npx pm2 restart api-server",
