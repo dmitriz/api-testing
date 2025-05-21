@@ -1,7 +1,7 @@
 // Tests for the mock implementation of the OpenAI Assistants API
 // This validates that our mock server correctly implements the expected behavior
 const http = require('http');
-const app = require('../src/mock-openai-api-server');
+const app = require('./mock-openai-server');
 
 /**
  * Utility function to make HTTP requests to a local instance of our server

@@ -16,21 +16,39 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
-// Assistant chat endpoint - simulates a response from OpenAI Assistants API
+// Assistant chat endpoint
 app.post('/assistant/chat', (req, res) => {
-  const { message } = req.body;
-  // Allow empty strings to pass, but reject null/undefined
-  if (message === undefined || message === null) {
+  // Validate that message exists and isn't null
+  if (!req.body.hasOwnProperty('message')) {
     return res.status(400).json({
       code: 1001,
-      message: "Missing required field: 'message'."
+      message: 'Missing required field: message'
     });
   }
   
-  // Simple mock response that simulates an AI assistant response
-  res.status(200).json({
-    response: `AI response to: "${message}"`
+  if (req.body.message === null) {
+    return res.status(400).json({
+      code: 1001,
+      message: 'Field cannot be null: message'
+    });
+  }
+  
+  // Generate mock response
+  const userMessage = req.body.message;
+  return res.status(200).json({
+    response: `I received your message: "${userMessage}"`
   });
+});
+
+// Handle malformed JSON bodies
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    return res.status(400).json({
+      code: 1002,
+      message: 'Malformed JSON in request body.'
+    });
+  }
+  next(err);
 });
 
 // Global error handling middleware
