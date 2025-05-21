@@ -1,20 +1,26 @@
 // src/openai-assistants-example/assistant-client.js
 const OpenAI = require('openai');
+const path = require('path');
+const fs = require('fs');
 
-// Load environment variables from .env file if present (for local development)
-// In a real app, you might have a more robust config management
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
+// Load API key from .secrets folder
+let openaiApiKey;
+try {
+  // Try to load API key from .secrets folder
+  const apiKeys = require('../../.secrets/api-keys');
+  openaiApiKey = apiKeys.OPENAI_API_KEY;
+} catch (error) {
+  // Fall back to environment variables if .secrets file is not available
+  if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+  }
+  openaiApiKey = process.env.OPENAI_API_KEY;
 }
 
-const openaiApiKey = process.env.OPENAI_API_KEY;
-
 if (!openaiApiKey) {
-  console.warn("Warning: OPENAI_API_KEY environment variable is not set. OpenAI calls will likely fail.");
-  // You might choose to throw an error here in a real application
-  // throw new Error("OPENAI_API_KEY environment variable is not set.");
+  console.warn("Warning: OPENAI_API_KEY not found in .secrets/api-keys.js or environment variables. OpenAI calls will likely fail.");
   if (process.env.NODE_ENV === 'production') {
-    throw new Error("OPENAI_API_KEY environment variable is not set.");
+    throw new Error("OPENAI_API_KEY not available. Please add it to .secrets/api-keys.js");
   }
 }
 
