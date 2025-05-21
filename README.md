@@ -5,6 +5,7 @@ This repository demonstrates contract testing for both API consumers (using a re
 ## Project Overview
 
 This project serves as an example of:
+
 1. A Node.js Express API server that implements the endpoints defined in `api-spec.yaml`
 2. Contract testing of the API provider using Dredd
 3. In-memory data storage for demonstration purposes
@@ -32,7 +33,7 @@ Start the Express API server:
 npm run start:server
 ```
 
-The server will run on http://localhost:3000 and will display the available user IDs and endpoints.
+The server will run on <http://localhost:3000> and will display the available user IDs and endpoints.
 
 ## API Endpoints
 
@@ -47,9 +48,9 @@ The server comes pre-configured with the following test users:
 
 | User ID | Email | Display Name |
 |---------|-------|--------------|
-| a1b2c3d4-e5f6-7890-1234-567890abcdef | test.user.A@example.com | Test User A (from spec example) |
-| b2c3d4e5-f6a7-8901-2345-67890abcdef1 | test.user.B@example.com | Test User B (from spec example) |
-| f4a7b8c9-d0e1-2345-6789-0abcdef12345 | original.get.user@example.com | Original GET User |
+| a1b2c3d4-e5f6-7890-1234-567890abcdef | <test.user.A@example.com> | Test User A (from spec example) |
+| b2c3d4e5-f6a7-8901-2345-67890abcdef1 | <test.user.B@example.com> | Test User B (from spec example) |
+| f4a7b8c9-d0e1-2345-6789-0abcdef12345 | <original.get.user@example.com> | Original GET User |
 
 ## Contract Testing
 
