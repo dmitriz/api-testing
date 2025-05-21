@@ -83,8 +83,16 @@ app.put('/v1/users/:userId/profile', (req, res) => {
   }
 
   users[userId].email = email;
+  users[userId].email = email;
   if (displayName !== undefined) {
-    users[userId].displayName = displayName;
+    if (typeof displayName === 'string') {
+      users[userId].displayName = displayName;
+    } else {
+      // Optional: return a 400 error if displayName is provided but not a string
+      // Or, simply ignore non-string displayName updates silently
+      // For now, let's assume we only update if it's a string
+      console.warn(`Invalid type for displayName for user ${userId}. Expected string.`);
+    }
   }
 
   res.status(200).json({
