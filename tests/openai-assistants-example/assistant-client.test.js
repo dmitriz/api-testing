@@ -87,13 +87,30 @@ describe('OpenAI Assistant Client', () => {
   });
 
   describe('createThread', () => {
-    it('should call openai.beta.threads.create', async () => {
+    it('should call openai.beta.threads.create with correct parameters', async () => {
+      const mockThreadResponse = { id: 'thread_123' };
+      mockCreateThreadFn.mockResolvedValue(mockThreadResponse);
+
+      const threadOptions = {
+        messages: [
+          { role: 'user', content: 'Hello, assistant!' }
+        ],
+        metadata: { user_id: 'test_user_123' }
+      };
+      const result = await createThread(threadOptions);
+
+      expect(mockCreateThreadFn).toHaveBeenCalledWith(threadOptions);
+      expect(result).toEqual(mockThreadResponse);
+    });
+    
+    it('should call openai.beta.threads.create without parameters when no options provided', async () => {
       const mockThreadResponse = { id: 'thread_123' };
       mockCreateThreadFn.mockResolvedValue(mockThreadResponse);
 
       const result = await createThread();
 
       expect(mockCreateThreadFn).toHaveBeenCalledTimes(1);
+      expect(mockCreateThreadFn).toHaveBeenCalledWith();
       expect(result).toEqual(mockThreadResponse);
     });
   });

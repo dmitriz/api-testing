@@ -41,12 +41,15 @@ async function createAssistant(assistantOptions) {
 
 /**
  * Creates a new conversation thread.
+ * @param {object} [threadOptions] - Options for creating the thread.
+ * @param {Array<object>} [threadOptions.messages] - Initial messages for the thread.
+ * @param {object} [threadOptions.metadata] - Optional metadata for the thread.
  * @returns {Promise<OpenAI.Beta.Threads.Thread>} The created thread object.
  */
-async function createThread() {
+async function createThread(threadOptions) {
   if (!openai.apiKey) throw new Error('OpenAI API key not configured.');
-  console.log('Creating new thread...');
-  const thread = await openai.beta.threads.create();
+  console.log('Creating new thread with options:', threadOptions);
+  const thread = await openai.beta.threads.create(threadOptions);
   console.log('Thread created:', thread.id);
   return thread;
 }
