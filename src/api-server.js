@@ -59,12 +59,18 @@ app.put('/v1/users/:userId/profile', (req, res) => {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(userId)) {
     return res.status(400).json({
-      code: 1000,
-      message: "Invalid userId format. Must be a valid UUID.",
-    });
-  }
-
-  if (!users[userId]) {
+      if (typeof email !== 'string') {
+         return res.status(400).json({
+             code: 1002,
+             message: "Invalid input: 'email' must be a string.",
+         });
+      }
+      if (displayName !== undefined && typeof displayName !== 'string') {
+         return res.status(400).json({
+             code: 1003,
+             message: "Invalid input: 'displayName' must be a string.",
+         });
+      }
     return res.status(404).json({
       code: 40401,
       message: 'User not found. Cannot update.',
