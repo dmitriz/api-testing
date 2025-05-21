@@ -53,12 +53,12 @@ app.get('/v1/users/:userId/profile', (req, res) => {
 });
 app.put('/v1/users/:userId/profile', (req, res) => {
   const { userId } = req.params;
-  const { email, displayName } = req.body;
-
-  // Validate userId format (UUID)
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  if (!uuidRegex.test(userId)) {
+  if (!email || email.trim() === '') {
     return res.status(400).json({
+      code: 1001,
+      message: "Invalid input: 'email' is a required field and cannot be empty.",
+    });
+  }
       if (typeof email !== 'string') {
          return res.status(400).json({
              code: 1002,
