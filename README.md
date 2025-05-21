@@ -211,9 +211,8 @@ When writing tests for this API, consider the following best practices:
 1. **Organize by Folders**: Group related API endpoints in folders
 2. **Use Environment Variables**: Don't hardcode URLs, ports, etc.
 3. **Secure API Keys**: Keep API keys in `.secrets` folder, not in environment variables
-4. **Pre-request Scripts**: Use them for setup like generating test data (available in `tests/postman/pre-request-script.js`)
-5. **Test Scripts**: Validate responses thoroughly (examples in `tests/postman/api-collection.json`)
-6. **CI/CD Integration**: Run Newman in your CI/CD pipeline
+4. **Test Scripts**: Validate responses thoroughly (examples in `tests/postman/api-collection.json`)
+5. **CI/CD Integration**: Run Newman in your CI/CD pipeline
 
 For more information, refer to:
 
