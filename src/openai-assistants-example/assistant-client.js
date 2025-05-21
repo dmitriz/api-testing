@@ -55,7 +55,9 @@ async function createAssistant(assistantOptions) {
 async function createThread(threadOptions) {
   if (!openai.apiKey) throw new Error('OpenAI API key not configured.');
   console.log('Creating new thread with options:', threadOptions);
-  const thread = await openai.beta.threads.create(threadOptions);
+  const thread = threadOptions === undefined 
+    ? await openai.beta.threads.create()
+    : await openai.beta.threads.create(threadOptions);
   console.log('Thread created:', thread.id);
   return thread;
 }
