@@ -1,0 +1,35 @@
+{
+  "name": "api-request-builder-contract-test-example",
+  "version": "1.0.0",
+  "description": "Example of contract testing an Axios request builder function and a sample API provider using OpenAPI.",
+  "main": "src/api-server.js",
+  "directories": {
+    "test": "tests",
+    "src": "src"
+  },
+  "scripts": {
+    "test": "jest",
+    "start:server": "node src/api-server.js",
+    "test:contract:provider": "dredd api-spec.yaml http://localhost:3000"
+  },
+  "keywords": [
+    "openapi",
+    "swagger",
+    "contract-testing",
+    "axios",
+    "jest",
+    "openapi-backend",
+    "express",
+    "dredd"
+  ],
+  "author": "dmitriz",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "openapi-backend": "^5.9.2",
+    "dredd": "^14.1.2"
+  }
+}
