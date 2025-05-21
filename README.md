@@ -6,17 +6,17 @@ This repository demonstrates modern API testing approaches for the OpenAI Assist
 
 This project serves as an example of:
 
-1. A Node.js Express API server that acts as a mock implementation of the OpenAI Assistants API for testing purposes
-2. API testing using Postman collections and Newman CLI runner to validate API contract conformance
-3. An OpenAI Assistants API client that demonstrates key interactions including assistant creation, thread management, messaging, and run execution with appropriate error handling
-4. Jest-based unit testing that verifies both the mock server behavior and client functionality
+- A Node.js Express API server that acts as a mock implementation of the OpenAI Assistants API for testing purposes
+- API testing using Postman collections and Newman CLI runner to validate API contract conformance
+- An OpenAI Assistants API client that demonstrates key interactions including assistant creation, thread management, messaging, and run execution with appropriate error handling
+- Jest-based unit testing that verifies both the mock server behavior and client functionality
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v16 or higher recommended)
-- npm (v7 or higher recommended)
+- Node.js (v22 or higher recommended)
+- npm (v9 or higher recommended)
 
 ### Installation
 
@@ -144,13 +144,13 @@ The project includes a Postman collection (`tests/postman/api-collection.json`) 
 
 #### Using Newman CLI (Recommended)
 
-1. Make sure the server is running in another terminal window:
+- Make sure the server is running in another terminal window:
 
    ```bash
    npm run start
    ```
 
-2. Run the API tests from the command line:
+- Run the API tests from the command line:
 
   /**
 
@@ -226,10 +226,16 @@ npm test
 
 The API contract is specified implicitly through the test cases in the Postman collection. Each test defines the expected request format and response structure, effectively documenting the API contract.
 
-To verify that your implementation matches the expected contract:
+Key API testing practices:
 
-1. Run the API server: `npm run start:server`
-2. Run the API tests: `npm run test:api`
+- **Organize by Folders**: Group related API endpoints in folders
+- **Use Environment Variables**: Don't hardcode URLs, ports, etc.
+- **Secure API Keys**: Always store API keys in the `.secrets` folder, which should be excluded from version control. This project does not use environment variables for security reasons.
+
+To verify your API implementation:
+
+- Run the API server: `npm run start:server`
+- Run the API tests: `npm run test:api`
 
 A successful test run indicates that your API implementation conforms to the expected contract.
 
@@ -266,17 +272,15 @@ This project includes a complete client for interacting with the OpenAI Assistan
 
 ### Obtaining an OpenAI API Key
 
-1. Go to the [OpenAI API keys page](https://platform.openai.com/api-keys).
-2. Log in or create an account if you don't have one.
-3. Click on "+ Create new secret key".
-4. Give your key a name (e.g., "api-testing-example") and click "Create secret key".
-5. **Important:** Copy the generated API key immediately and store it securely. You will not be able to see it again through the OpenAI website.
+- Go to the [OpenAI API keys page](https://platform.openai.com/api-keys).
+- Log in or create an account if you don't have one.
+- Click on "+ Create new secret key".
+- Give your key a name (e.g., "api-testing-example") and click "Create secret key".
+- **Important:** Copy the generated API key immediately and store it securely. You will not be able to see it again through the OpenAI website.
 
 ### Configuring the API Key
 
-The client code looks for the API key in the following locations, in order:
-
-1. A file at `.secrets/api-keys.js` with the following structure:
+The client code exclusively loads the API key from a file at `.secrets/api-keys.js` with the following structure:
    
    ```javascript
    module.exports = {
@@ -284,25 +288,25 @@ The client code looks for the API key in the following locations, in order:
    };
    ```
 
-2. If the `.secrets` file is not found, it falls back to environment variables.
+**Important Security Note:** This project does not use environment variables for storing API keys to enforce better security practices. All API keys must be stored in the `.secrets` directory.
 
 **Do NOT commit your API key directly into the code or repository.**
 
 For local development:
 
-1. Create the `.secrets` directory in the project root if it doesn't exist
-2. Create a file `.secrets/api-keys.js` with your API key
-3. Ensure `.secrets` is listed in your `.gitignore` file
+- Create the `.secrets` directory in the project root if it doesn't exist
+- Create a file `.secrets/api-keys.js` with your API key
+- Ensure `.secrets` is listed in your `.gitignore` file
 
 ### API Testing Best Practices
 
 When writing tests for this API, consider the following best practices:
 
-1. **Organize by Folders**: Group related API endpoints in folders
-2. **Use Environment Variables**: Don't hardcode URLs, ports, etc.
-3. **Secure API Keys**: Keep API keys in `.secrets` folder, not in environment variables
-4. **Test Scripts**: Validate responses thoroughly (examples in `tests/postman/api-collection.json`)
-5. **CI/CD Integration**: Run Newman in your CI/CD pipeline
+- **Organize by Folders**: Group related API endpoints in folders
+- **Use Environment Variables**: Don't hardcode URLs, ports, etc.
+- **Secure API Keys**: Always store API keys in the `.secrets` folder, never in environment variables or the code
+- **Test Scripts**: Validate responses thoroughly (examples in `tests/postman/api-collection.json`)
+- **CI/CD Integration**: Run Newman in your CI/CD pipeline
 
 For more information, refer to:
 
