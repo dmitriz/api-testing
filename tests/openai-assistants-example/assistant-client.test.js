@@ -1,15 +1,5 @@
 // tests/openai-assistants-example/assistant-client.test.js
-const {
-  createAssistant,
-  createThread,
-  addMessageToThread,
-  runAssistant,
-  listMessages,
-  openai // Import the actual openai instance if we want to mock its nested properties
-} = require('../../src/openai-assistants-example/assistant-client');
-
-// Mock the entire OpenAI SDK client methods used
-// We need to mock deeply as methods are on beta.assistants, beta.threads etc.
+// First mock the OpenAI module before requiring the client
 jest.mock('openai', () => {
   const mockAssistants = {
     create: jest.fn(),
@@ -34,9 +24,18 @@ jest.mock('openai', () => {
   }));
 });
 
+// Now import the client after mocking the OpenAI module
+const {
+  createAssistant,
+  createThread,
+  addMessageToThread,
+  runAssistant,
+  listMessages,
+  openai // This will now use the mocked OpenAI instance
+} = require('../../src/openai-assistants-example/assistant-client');
+
 // Helper to get the mocked functions from the deeply nested structure
 // This is a bit verbose due to the SDK's structure.
-let mockOpenAIInstance;
 let mockCreateAssistantFn;
 let mockCreateThreadFn;
 let mockAddMessageToThreadFn;
