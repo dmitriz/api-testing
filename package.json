@@ -14,9 +14,11 @@
     "restart": "npx pm2 restart api-server",
     "status": "npx pm2 status",
     "logs": "npx pm2 logs api-server",
+    "logs:explain": "echo \"PM2 logs command streams real-time logs and requires manual exit with Ctrl+C when finished viewing\"",
+    "logs:recent": "npx pm2 logs api-server --lines 20 --nostream",
     "delete": "npx pm2 delete api-server",
-    "test:api": "NODE_OPTIONS=\"--no-experimental-global-webcrypto\" newman run tests/postman/api-collection.json -e tests/postman/environment.json",
-    "test:api:explain": "echo \"The --no-experimental-global-webcrypto flag disables experimental Web Crypto API in Node.js to prevent conflicts with Newman dependencies\""
+    "test:api": "newman run tests/postman/api-collection.json -e tests/postman/environment.json",
+    "test:api:explain": "echo \"Newman is used to run Postman collections for API testing disables experimental Web Crypto API in Node.js to prevent conflicts with Newman dependencies\""
   },
   "keywords": [
     "openapi",

@@ -10,7 +10,7 @@ module.exports = {
       // Name of the application in PM2
       name: "api-server",
       // Path to the main script file
-      script: "src/mock-openai-api-server.js",
+      script: "src/mock-openai-server.js",
       // Number of instances to launch (1 = no clustering)
       instances: 1,
 
