@@ -40,9 +40,11 @@ app.get('/v1/users/:userId/profile', (req, res) => {
     res.status(200).json({
       id: user.id,
       email: user.email,
-      displayName: user.displayName,
-    });
-  } else {
+      app.put('/v1/users/:userId/profile', (req, res) => {
+        const { userId } = req.params;
+        const { email, displayName } = req.body;
+  
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     res.status(404).json({
       code: 40401,
       message: 'User not found.',
